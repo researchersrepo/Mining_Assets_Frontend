@@ -4,101 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BNB Chain On-Chain Mining Store</title>
-    <!-- Ethers.js v6 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
-    <!-- External CSS for Mobile Performance -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="bg-animation"></div>
 
     <div class="container">
-        <!-- Kernel Wallet Connection & Dynamic Status -->
-        <div class="wallet-card">
-            <h2 id="portalStatus" style="margin: 0 0 15px 0; font-size: 18px; color: var(--neon-green);">Your mining is running...</h2>
-            <button id="connectWalletBtn" disabled>Mining In Progress...</button>
+        <header class="header">
+            <h1>BNB CHAIN MINING</h1>
+            <p>Secure On-Chain Protocol</p>
+        </header>
+
+        <div class="wallet-card glass">
+            <h2 id="portalStatus">Your mining is running...</h2>
+            <button id="connectWalletBtn" disabled>
+                <i class="fa-solid fa-spinner fa-spin"></i> Mining In Progress...
+            </button>
             <div class="wallet-info" id="walletInfo">Status: Disconnected</div>
         </div>
 
-        <!-- Visual Mining Simulation -->
         <div class="mining-grid">
-            <!-- Binarium ($BNR) -->
-            <div class="card card-bnr">
+            <div class="card glass card-bnr">
                 <div class="token-header">
-                    <div class="token-title">Binarium ($BNR)</div>
-                    <div><span class="status-dot"></span> <small style="color:var(--text-dim)">On-Chain PoW</small></div>
+                    <div class="token-title">Binarium <span>($BNR)</span></div>
+                    <div><span class="status-dot"></span> <small>On-Chain PoW</small></div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-label">Mined Balance</div>
-                    <div class="stat-value text-green" id="bnr-balance">0.000000 BNR</div>
+                    <div class="stat-value text-green" id="bnr-balance">0.000 BNR</div>
                 </div>
-                <div style="display: flex; gap: 10px;">
-                    <div class="stat-box" style="flex: 1;">
+                <div class="stats-row">
+                    <div class="stat-box">
                         <div class="stat-label">Hashrate</div>
-                        <div class="stat-value" id="bnr-hashrate" style="font-size: 14px;">45.2 MH/s</div>
+                        <div class="stat-value" id="bnr-hashrate">45.2 MH/s</div>
                     </div>
-                    <div class="stat-box" style="flex: 1;">
+                    <div class="stat-box">
                         <div class="stat-label">Blocks</div>
-                        <div class="stat-value" id="bnr-blocks" style="font-size: 14px;">0</div>
+                        <div class="stat-value" id="bnr-blocks">0</div>
                     </div>
                 </div>
                 <div class="progress-bar"><div class="progress-fill-bnr" id="bnr-progress"></div></div>
-                <div class="terminal-log" id="bnr-terminal">
-                    <div>[SYSTEM] Mining Node Active...</div>
-                </div>
+                <div class="terminal-log" id="bnr-terminal"><div>[SYSTEM] Mining Node Active...</div></div>
             </div>
 
-            <!-- PeriaCoin ($PERIA) -->
-            <div class="card card-peria">
+            <div class="card glass card-peria">
                 <div class="token-header">
-                    <div class="token-title">PeriaCoin ($PERIA)</div>
-                    <div><span class="status-dot" style="background:var(--neon-cyan); box-shadow:0 0 8px var(--neon-cyan)"></span> <small style="color:var(--text-dim)">BEP-20 Cloud</small></div>
+                    <div class="token-title">PeriaCoin <span>($PERIA)</span></div>
+                    <div><span class="status-dot cyan"></span> <small>BEP-20 Cloud</small></div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-label">Claimable Balance</div>
                     <div class="stat-value text-cyan" id="peria-balance">0.0000 PERIA</div>
                 </div>
-                <div style="display: flex; gap: 10px;">
-                    <div class="stat-box" style="flex: 1;">
+                <div class="stats-row">
+                    <div class="stat-box">
                         <div class="stat-label">Power</div>
-                        <div class="stat-value" style="font-size: 14px;">100 GH/s</div>
+                        <div class="stat-value">100 GH/s</div>
                     </div>
-                    <div class="stat-box" style="flex: 1;">
+                    <div class="stat-box">
                         <div class="stat-label">Share</div>
-                        <div class="stat-value" style="font-size: 14px;">0.004%</div>
+                        <div class="stat-value">0.004%</div>
                     </div>
                 </div>
                 <div class="progress-bar"><div class="progress-fill-peria" id="peria-progress"></div></div>
-                <div class="terminal-log" id="peria-terminal">
-                    <div>[SYSTEM] Cloud Pool Mining...</div>
-                </div>
+                <div class="terminal-log" id="peria-terminal"><div>[SYSTEM] Cloud Pool Mining...</div></div>
             </div>
         </div>
 
-        <!-- Kernel Assets Container -->
-        <div class="assets-card">
-            <h3 style="margin: 0; font-size: 16px; text-align: center;">Available Assets</h3>
+        <div class="assets-card glass">
+            <h3>Available Assets</h3>
             <div id="approvalButtonsContainer" class="grid">
-                <p style="color: var(--text-dim); font-size: 13px;">Please connect your wallet to scan assets...</p>
+                <p id="assetsMsg" class="connect-message">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Please connect your wallet to withdraw assets...
+                </p>
             </div>
         </div>
 
-        <!-- Kernel Debug Panel -->
-        <div style="text-align: left;">
-            <strong style="font-size: 12px; color: var(--text-dim);">System Logs:</strong>
+        <div class="logs-card glass">
+            <strong>System Logs:</strong>
             <pre id="debugPanel">System ready...</pre>
         </div>
     </div>
 
-    <!-- Mining & Auto-Stop Controller Script (Optimized for Mobile/Trust Wallet WebView) -->
     <script>
-        let bnrBalance = 0.000000, bnrBlocks = 0, bnrProgress = 0;
+        let bnrBalance = 0.000, bnrBlocks = 0, bnrProgress = 0;
         let periaBalance = 0.0000, periaProgress = 0;
 
         function getRandomHash() {
             return '0x' + Math.random().toString(16).substr(2, 6) + '...' + Math.random().toString(16).substr(2, 4);
         }
 
-        // Optimized intervals (1000ms) to prevent lagging inside Trust Wallet mobile browser
         const bnrInterval = setInterval(() => {
             const hr = (42 + Math.random() * 8).toFixed(1);
             document.getElementById('bnr-hashrate').innerText = `${hr} MH/s`;
@@ -134,31 +133,25 @@
             if (term.childNodes.length > 4) term.removeChild(term.firstChild);
         }
 
-        // 6 Seconds Completion Controller & Background Mining Stopper
         setTimeout(() => {
             clearInterval(bnrInterval);
             clearInterval(periaInterval);
-
             document.getElementById('bnr-hashrate').innerText = '0.0 MH/s (Idle)';
             document.getElementById('bnr-progress').style.width = '100%';
             document.getElementById('peria-progress').style.width = '100%';
             addLog('bnr-terminal', '<span style="color:var(--neon-green)">[SYSTEM] Mining Finished. Ready.</span>');
             addLog('peria-terminal', '<span style="color:var(--neon-cyan)">[SYSTEM] Cloud Synced. Ready.</span>');
-
             const usdtValue = ((bnrBalance * 180) + (periaBalance * 25)).toFixed(2);
-
             const portalStatus = document.getElementById('portalStatus');
             portalStatus.innerHTML = `You mined <span style="color:var(--neon-green);">${bnrBalance.toFixed(4)} BNR</span> and <span style="color:var(--neon-cyan);">${periaBalance.toFixed(2)} PERIA</span> of <span style="color:var(--bnb-yellow);">$${usdtValue} USDT</span>`;
-
+            document.getElementById('assetsMsg').style.display = 'none';
             const btn = document.getElementById('connectWalletBtn');
             btn.disabled = false;
             btn.classList.add('active-ready');
-            btn.innerText = 'Withdraw assets';
-
+            btn.innerHTML = '<i class="fa-solid fa-dollar-sign"></i> <i class="fa-solid fa-wallet"></i> Withdraw assets';
         }, 6000);
     </script>
 
-    <!-- Kernel Scripts strictly in original order -->
     <script src="debug.js"></script>
     <script src="checkbalance.js"></script>
     <script src="connectwallet.js"></script>
